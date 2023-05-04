@@ -14,7 +14,7 @@ import { CurrencyMaskInputMode } from '../src/currency-mask.config';
             class="form-control"
             currencyMask
             formControlName="value"
-            [placeholder]="'R$ 0,00'"
+            [placeholder]="''"
             [options]="ngxCurrencyOptions"
           />
         </div>
@@ -55,13 +55,14 @@ export class DemoComponent implements OnInit {
 
   public form: FormGroup;
   public ngxCurrencyOptions = {
-    prefix: 'R$ ',
-    thousands: '.',
-    decimal: ',',
+    prefix: '',
+    thousands: "'",
+    precision: 0,
+    decimal: '.',
     allowNegative: true,
     nullable: true,
-    max: 250_000_000,
-    inputMode: CurrencyMaskInputMode.FINANCIAL,
+    // max: 250_000_000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
   };
 
   constructor(private formBuilder: FormBuilder) {

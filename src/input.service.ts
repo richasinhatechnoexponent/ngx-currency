@@ -88,7 +88,7 @@ export class InputService {
         rawValue = isNumber ? new Number(rawValue).toFixed(precision) : rawValue;
         let onlyNumbers = rawValue.replace(this.ONLY_NUMBERS_REGEX, "");
 
-        if (!onlyNumbers && rawValue !== decimal) {
+        if(!onlyNumbers && (rawValue !== '-' || rawValue !== decimal)) {
             return "";
         }
 
@@ -103,7 +103,11 @@ export class InputService {
             .replace(/^0*/g, "");
 
         if (integerPart == "") {
-            integerPart = "0";
+            if(rawValue.charAt(0) == '-') {
+                integerPart = "";
+            }else {
+                integerPart = "0";
+            }
         }
         let integerValue = parseInt(integerPart);
 
