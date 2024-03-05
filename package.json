@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
-  "name": "@sumond25/ngx-currency",
+  "name": "ngx-currency-demo",
   "version": "3.0.1",
   "description": "A very simple currency mask directive that allows using a number attribute with the ngModel.",
   "scripts": {
