@@ -115,12 +115,12 @@ export class InputService {
     rawValue = isNumber ? new Number(rawValue).toFixed(precision) : rawValue;
     let onlyNumbers = rawValue.replace(this._onlyNumbersRegex, '');
 
-    if (!onlyNumbers && rawValue !== decimal) {
-      return '';
-    }
-    // if(!onlyNumbers && (rawValue !== '-' || rawValue !== decimal)) {
-    //   return "";
+    // if (!onlyNumbers && rawValue !== decimal) {
+    //   return '';
     // }
+    if(!onlyNumbers && (rawValue !== '-' || rawValue !== decimal)) {
+      return "";
+    }
     if (
       inputMode === NgxCurrencyInputMode.Natural &&
       !isNumber &&
