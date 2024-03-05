@@ -118,7 +118,9 @@ export class InputService {
     if (!onlyNumbers && rawValue !== decimal) {
       return '';
     }
-
+    // if(!onlyNumbers && (rawValue !== '-' || rawValue !== decimal)) {
+    //   return "";
+    // }
     if (
       inputMode === NgxCurrencyInputMode.Natural &&
       !isNumber &&
@@ -134,9 +136,16 @@ export class InputService {
       .replace(/^\u06F0*/g, '')
       .replace(/^0*/g, '');
 
-    if (integerPart == '') {
-      integerPart = '0';
-    }
+    // if (integerPart == '') {
+    //   integerPart = '0';
+    // }
+    if (integerPart == "") {
+      if(rawValue.charAt(0) == '-') {
+          integerPart = "";
+      }else {
+          integerPart = "0";
+      }
+  }
     const integerValue = parseInt(integerPart);
 
     integerPart = integerPart.replace(
