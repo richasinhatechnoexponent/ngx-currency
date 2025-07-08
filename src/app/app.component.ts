@@ -15,13 +15,15 @@ import {
 })
 export class AppComponent {
   ngxCurrencyOptions = {
-    prefix: 'R$ ',
-    thousands: '.',
-    decimal: ',',
+    align: 'right',
+    prefix: '',
+    thousands: ',',
+    decimal: '.',
     allowNegative: true,
     nullable: true,
     max: 250_000_000,
-    inputMode: NgxCurrencyInputMode.Financial,
+    precision: 0,
+    inputMode: NgxCurrencyInputMode.Natural,
   };
   ngxCurrencyInputMode = NgxCurrencyInputMode;
 
