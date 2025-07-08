@@ -12,8 +12,7 @@ import {
   styleUrl: './app.component.scss',
   imports: [ReactiveFormsModule, JsonPipe, NgxCurrencyDirective],
 })
-export class AppComponent implements OnInit {
-  public form: FormGroup;
+export class AppComponent {
   public ngxCurrencyOptions = {
     align: 'right',
     prefix: '',
