@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [19.0.0](https://github.com/nbfontana/ngx-currency/compare/v18.0.0...v19.0.0) (2025-01-06)
+
+
+### Features
+
+* migrate to Angular 19 ([d61a64b](https://github.com/nbfontana/ngx-currency/commit/d61a64b7f2a7b7bd3d4d620ae7af4af9347612d6))
+
+
+### Bug Fixes
+
+* allow work outside of forms ([ffcc5f3](https://github.com/nbfontana/ngx-currency/commit/ffcc5f3b65849397974caf20056e4d632b493c96))
+* create InputHandler in constructor ([#195](https://github.com/nbfontana/ngx-currency/issues/195)) ([79161be](https://github.com/nbfontana/ngx-currency/commit/79161bebd36143e23c6c779174b4b0a3c777fd4a))
+
+## [18.0.0](https://github.com/nbfontana/ngx-currency/compare/v17.0.0...v18.0.0) (2024-06-04)
+
+
+### Features
+
+* allow currencyMask to be used as input instead of options ([daf0c06](https://github.com/nbfontana/ngx-currency/commit/daf0c06a45db94fdc9e6e52455b54969c291d4bb))
+* migrate to Angular 18 ([a11fdc3](https://github.com/nbfontana/ngx-currency/commit/a11fdc317ce2328c24d7bb65d237c3d839bc0a59))
+
+
+### Bug Fixes
+
+* .nvmrc version ([2c0246b](https://github.com/nbfontana/ngx-currency/commit/2c0246bed889fb073eb85299ef419c73e57ed2fe))
+
 ## [17.0.0](https://github.com/nbfontana/ngx-currency/compare/v3.0.0...v17.0.0) (2024-01-11)
 
 

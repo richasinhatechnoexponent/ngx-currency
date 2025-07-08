@@ -3,10 +3,10 @@ import { NgxCurrencyConfig, NgxCurrencyInputMode } from './ngx-currency.config';
 
 export class InputService {
   private readonly _singleDigitRegex = new RegExp(
-    /^[0-9\u0660-\u0669\u06F0-\u06F9]$/
+    /^[0-9\u0660-\u0669\u06F0-\u06F9]$/,
   );
   private readonly _onlyNumbersRegex = new RegExp(
-    /[^0-9\u0660-\u0669\u06F0-\u06F9]/g
+    /[^0-9\u0660-\u0669\u06F0-\u06F9]/g,
   );
 
   private readonly _perArNumber = new Map<string, string>([
@@ -37,7 +37,7 @@ export class InputService {
 
   constructor(
     htmlInputElement: HTMLInputElement,
-    private _options: NgxCurrencyConfig
+    private _options: NgxCurrencyConfig,
   ) {
     this.inputManager = new InputManager(htmlInputElement);
   }
@@ -63,7 +63,7 @@ export class InputService {
       const rawValueStart = this.rawValue.substring(0, selectionStart);
       let rawValueEnd = this.rawValue.substring(
         selectionEnd,
-        this.rawValue.length
+        this.rawValue.length,
       );
 
       // In natural mode, replace decimals instead of shifting them.
@@ -97,7 +97,7 @@ export class InputService {
   applyMask(
     isNumber: boolean,
     rawValue: string,
-    disablePadAndTrim = false
+    disablePadAndTrim = false,
   ): string {
     const {
       allowNegative,
@@ -150,7 +150,7 @@ export class InputService {
 
     integerPart = integerPart.replace(
       /\B(?=([0-9\u0660-\u0669\u06F0-\u06F9]{3})+(?![0-9\u0660-\u0669\u06F0-\u06F9]))/g,
-      thousands
+      thousands,
     );
     if (thousands && integerPart.startsWith(thousands)) {
       integerPart = integerPart.substring(1);
@@ -215,7 +215,7 @@ export class InputService {
     } else if (actualPrecision > precision) {
       decimalPortion = decimalPortion.substring(
         0,
-        decimalPortion.length + precision - actualPrecision
+        decimalPortion.length + precision - actualPrecision,
       );
     }
 
@@ -232,7 +232,7 @@ export class InputService {
     if (this._options.thousands) {
       value = value.replace(
         new RegExp('\\' + this._options.thousands, 'g'),
-        ''
+        '',
       );
     }
 
@@ -255,7 +255,7 @@ export class InputService {
       // Apply the mask to ensure the min and max values are enforced.
       this.rawValue = this.applyMask(
         false,
-        '-' + (this.rawValue ? this.rawValue : '0')
+        '-' + (this.rawValue ? this.rawValue : '0'),
       );
     }
   }
@@ -264,7 +264,7 @@ export class InputService {
     // Apply the mask to ensure the min and max values are enforced.
     this.rawValue = this.applyMask(
       false,
-      this.rawValue?.replace('-', '') ?? ''
+      this.rawValue?.replace('-', '') ?? '',
     );
   }
 
@@ -283,7 +283,7 @@ export class InputService {
     selectionEnd = Math.min(suffixStart, Math.max(selectionEnd, prefix.length));
     selectionStart = Math.min(
       suffixStart,
-      Math.max(selectionStart, prefix.length)
+      Math.max(selectionStart, prefix.length),
     );
 
     // Check if selection was entirely in the prefix or suffix.
@@ -378,13 +378,13 @@ export class InputService {
         this.rawValue.substring(prefix.length + 1);
       selectionFromEnd = Math.min(
         selectionFromEnd,
-        this.rawValue.length - prefix.length
+        this.rawValue.length - prefix.length,
       );
     }
 
     this.updateFieldValue(
       this.rawValue.length - selectionFromEnd + shiftSelection,
-      true
+      true,
     );
   }
 
@@ -392,20 +392,20 @@ export class InputService {
     const newRawValue = this.applyMask(
       false,
       this.rawValue ?? '',
-      disablePadAndTrim
+      disablePadAndTrim,
     );
     selectionStart ??= this.rawValue?.length ?? 0;
     selectionStart = Math.max(
       this._options.prefix.length,
       Math.min(
         selectionStart,
-        (this.rawValue?.length ?? 0) - this._options.suffix.length
-      )
+        (this.rawValue?.length ?? 0) - this._options.suffix.length,
+      ),
     );
     this.inputManager.updateValueAndCursor(
       newRawValue,
       this.rawValue?.length ?? 0,
-      selectionStart
+      selectionStart,
     );
   }
 

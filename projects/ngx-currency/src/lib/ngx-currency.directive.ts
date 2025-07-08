@@ -9,21 +9,19 @@ import {
   Input,
   KeyValueDiffer,
   KeyValueDiffers,
-  OnInit,
   Optional,
 } from '@angular/core';
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { InputHandler } from './input.handler';
 import {
+  NGX_CURRENCY_CONFIG,
   NgxCurrencyConfig,
   NgxCurrencyInputMode,
-  NGX_CURRENCY_CONFIG,
 } from './ngx-currency.config';
 
 @Directive({
-  standalone: true,
-  selector: '[currencyMask]',
+  selector: 'input[currencyMask]',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -33,24 +31,38 @@ import {
   ],
 })
 export class NgxCurrencyDirective
-  implements AfterViewInit, ControlValueAccessor, DoCheck, OnInit
+  implements AfterViewInit, ControlValueAccessor, DoCheck
 {
-  @Input() options: Partial<NgxCurrencyConfig> = {};
+  @Input()
+  set currencyMask(value: Partial<NgxCurrencyConfig> | string) {
+    if (typeof value === 'string') return;
 
-  private _inputHandler!: InputHandler;
+    this._options = value;
+  }
+
+  /**
+   * @deprecated Use currencyMask input instead
+   */
+  @Input()
+  set options(value: Partial<NgxCurrencyConfig>) {
+    this._options = value;
+  }
+
+  private readonly _inputHandler: InputHandler;
   private readonly _keyValueDiffer: KeyValueDiffer<
     keyof NgxCurrencyConfig,
     unknown
   >;
 
-  private _optionsTemplate: NgxCurrencyConfig;
+  private _options: Partial<NgxCurrencyConfig> = {};
+  private readonly _optionsTemplate: NgxCurrencyConfig;
 
   constructor(
     @Optional()
     @Inject(NGX_CURRENCY_CONFIG)
     globalOptions: Partial<NgxCurrencyConfig>,
     keyValueDiffers: KeyValueDiffers,
-    private readonly _elementRef: ElementRef
+    private readonly _elementRef: ElementRef<HTMLInputElement>,
   ) {
     this._optionsTemplate = {
       align: 'right',
@@ -67,28 +79,26 @@ export class NgxCurrencyDirective
     };
 
     this._keyValueDiffer = keyValueDiffers.find({}).create();
-  }
 
-  ngOnInit() {
     this._inputHandler = new InputHandler(this._elementRef.nativeElement, {
       ...this._optionsTemplate,
-      ...this.options,
+      ...this._options,
     });
   }
 
   ngAfterViewInit() {
     this._elementRef.nativeElement.style.textAlign =
-      this.options?.align ?? this._optionsTemplate.align;
+      this._options?.align ?? this._optionsTemplate.align;
   }
 
   ngDoCheck() {
-    if (this._keyValueDiffer.diff(this.options)) {
+    if (this._keyValueDiffer.diff(this._options)) {
       this._elementRef.nativeElement.style.textAlign =
-        this.options?.align ?? this._optionsTemplate.align;
+        this._options?.align ?? this._optionsTemplate.align;
 
       this._inputHandler.updateOptions({
         ...this._optionsTemplate,
-        ...this.options,
+        ...this._options,
       });
     }
   }
@@ -101,35 +111,35 @@ export class NgxCurrencyDirective
   @HostListener('cut')
   handleCut() {
     if (!this.isChromeAndroid()) {
-      !this.isReadOnly() && this._inputHandler.handleCut();
+      if (!this.isReadOnly()) this._inputHandler.handleCut();
     }
   }
 
   @HostListener('input')
   handleInput() {
     if (this.isChromeAndroid()) {
-      !this.isReadOnly() && this._inputHandler.handleInput();
+      if (!this.isReadOnly()) this._inputHandler.handleInput();
     }
   }
 
   @HostListener('keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
     if (!this.isChromeAndroid()) {
-      !this.isReadOnly() && this._inputHandler.handleKeydown(event);
+      if (!this.isReadOnly()) this._inputHandler.handleKeydown(event);
     }
   }
 
   @HostListener('keypress', ['$event'])
   handleKeypress(event: KeyboardEvent) {
     if (!this.isChromeAndroid()) {
-      !this.isReadOnly() && this._inputHandler.handleKeypress(event);
+      if (!this.isReadOnly()) this._inputHandler.handleKeypress(event);
     }
   }
 
   @HostListener('paste')
   handlePaste() {
     if (!this.isChromeAndroid()) {
-      !this.isReadOnly() && this._inputHandler.handlePaste();
+      if (!this.isReadOnly()) this._inputHandler.handlePaste();
     }
   }
 
