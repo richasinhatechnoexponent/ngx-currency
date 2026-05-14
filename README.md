@@ -14,6 +14,7 @@ https://nbfontana.github.io/ngx-currency/
 - [Getting Started](#getting-started)
 - [Documentation](https://nbfontana.github.io/ngx-currency/docs/)
 - [Development](#development)
+- [Publishing to npm](#publishing-to-npm)
 - [License](#license)
 
 ## Getting Started
@@ -151,6 +152,94 @@ When running in the Chrome browser, you can set code breakpoints to debug tests 
 - Enter a file name like `input.handler.ts` and click the file
 - Within the file, click on a row number to set a breakpoint
 - Refresh the browser window to re-run tests and stop on the breakpoint
+
+## Publishing to npm
+
+These steps apply to publishing the **library** built into `dist/ngx-currency/` (see `projects/ngx-currency/package.json` for the package `name`, for example `@sumond25/ngx-currency`). Do **not** publish the private demo app at the repo root.
+
+### Before you publish
+
+1. Create an account on [npmjs.com](https://www.npmjs.com/) if you do not have one.
+2. For a **scoped** package (`@scope/name`), the scope must match your npm **username** or an **organization** you control. Adjust `name` in `projects/ngx-currency/package.json` if needed, then rebuild.
+3. The first time you publish a public scoped package, you may need:  
+   `npm access public --scope=@your-scope`
+4. Create a **granular access token** (or classic token, if you still use one) with permission to **publish** this package. See [npm access tokens](https://docs.npmjs.com/about-access-tokens). If publish is blocked with `403` and a message about **2FA**, use a token that allows publishing under your account’s 2FA rules, or pass a one-time code with `--otp` (below).
+
+### Build the package
+
+From the repository root:
+
+```bash
+npm install
+npm run build:lib
+```
+
+This refreshes `dist/ngx-currency/` (including `package.json`, bundles, and typings).
+
+### `.npmrc` layout (project vs user)
+
+- The **repo** `.npmrc` should keep only **non-secret** settings (for example `legacy-peer-deps`). **Do not** commit `//registry.npmjs.org/:_authToken=…` to the repository.
+- Put your **token in your user-level** `.npmrc` (for example on Windows: `C:\Users\<you>\.npmrc`; on macOS/Linux: `~/.npmrc`). npm merges [multiple npmrc files](https://docs.npmjs.com/cli/v10/using-npm/npmrc#files); you **do not** need to copy `.npmrc` into `dist/ngx-currency/`. Publishing from that folder still picks up the user config when npm walks up the directory tree.
+- After `npm run build:lib`, `dist/ngx-currency/.npmignore` includes `.npmrc` so a stray token file in `dist/` is unlikely to be packed into the tarball.
+
+### Authentication with a token (recommended)
+
+1. On npmjs.com, create a **granular** token with **publish** access to your package (or scope).
+2. In your **user** `~/.npmrc`, add a single line (no quotes):
+
+   ```ini
+   //registry.npmjs.org/:_authToken=npm_your_token_here
+   ```
+
+   Or run once (writes to user config):
+
+   ```bash
+   npm config set //registry.npmjs.org/:_authToken=npm_your_token_here
+   ```
+
+3. Confirm npm sees you:
+
+   ```bash
+   npm whoami
+   ```
+
+You **do not** need `npm login` for this flow; that command starts a separate browser-based sign-in and does not replace a token in `~/.npmrc`.
+
+### Check the tarball (optional)
+
+```bash
+cd dist/ngx-currency
+npm pack --dry-run
+```
+
+### Publish
+
+```bash
+cd dist/ngx-currency
+npm publish --access public
+```
+
+If npm requires a 2FA code for this publish:
+
+```bash
+npm publish --access public --otp=123456
+```
+
+Replace `123456` with the current code from your authenticator app.
+
+### CI (GitHub Actions, etc.)
+
+Store the token as a secret (for example `NPM_TOKEN`), then before `npm publish`:
+
+```bash
+npm config set //registry.npmjs.org/:_authToken="${NPM_TOKEN}"
+```
+
+Or append that line to `~/.npmrc` in the job only. Never commit the token or echo it into files tracked by git.
+
+### Version bumps
+
+npm rejects a publish if that **exact version** already exists. Bump `version` in `projects/ngx-currency/package.json`, run `npm run build:lib` again, then publish from `dist/ngx-currency`.
 
 ## License
 
